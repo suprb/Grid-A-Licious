@@ -1,5 +1,5 @@
 /**
- * jQuery Grid-A-Licious(tm) v3.1
+ * jQuery Grid-A-Licious(tm) v3.0 fork 1
  * forked 2012-10-19 by Matthew Campagna
  * 
  * CHANGES:
@@ -118,7 +118,7 @@
 
         _setCols: function () {
             // calculate columns
-            itemWidth = $('.item').outerWidth(true);
+            itemWidth = $(this.options.selector).outerWidth(true);
             this.cols = Math.floor(this.box.width() / itemWidth);
             diff = (this.box.width() - (this.cols * itemWidth) ) / this.cols;
             w = (itemWidth + diff) / this.box.width() * 100;
