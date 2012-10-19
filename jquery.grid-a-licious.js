@@ -1,5 +1,25 @@
 /**
- * jQuery Grid-A-Licious(tm) v3.0
+ * jQuery Grid-A-Licious(tm) v3.1
+ * forked 2012-10-19 by Matthew Campagna
+ * 
+ * CHANGES:
+ *     	- removed 'gutter' and 'width' options
+ *		- script now fetches outer-width and margins from CSS and calculates grid dynamically.
+ * 		- accepts media queries.
+ * 		- example styling:
+ *		
+ *		 .item {
+ *			float: left;
+ *			margin: 0 8px 24px;
+ *			padding: 8px;
+ *			width: 250px;
+ *			}
+ *		
+ *		@media only screen and (max-width: 600px) {
+ *			.item {
+ *				width: 150px;
+ *				}
+ *			}
  *
  * Terms of Use - jQuery Grid-A-Licious(tm)
  * under the MIT (http://www.opensource.org/licenses/mit-license.php) License.
@@ -46,8 +66,6 @@
 
     $.Gal.settings = {
         selector: '.item',
-        width: 225,
-        gutter: 20,
         animate: false,
         animationOptions: {
             speed: 200,
@@ -100,16 +118,18 @@
 
         _setCols: function () {
             // calculate columns
-            this.cols = Math.floor(this.box.width() / this.options.width);
-            diff = (this.box.width() - (this.cols * this.options.width) - this.options.gutter) / this.cols;
-            w = (this.options.width + diff) / this.box.width() * 100;
+            itemWidth = $('.item').outerWidth(true);
+            this.cols = Math.floor(this.box.width() / itemWidth);
+            diff = (this.box.width() - (this.cols * itemWidth) ) / this.cols;
+            w = (itemWidth + diff) / this.box.width() * 100;
 
-            // add columns to box
+            // add columns to box            
+            var gutter = (diff / 2);
             for (var i = 0; i < this.cols; i++) {
                 var div = $('<div></div>').addClass('galcolumn').attr('id', 'item' + i + this.name).css({
                     'width': w + '%',
-                    'paddingLeft': this.options.gutter,
-                    'paddingBottom': this.options.gutter,
+                    'paddingLeft': gutter,
+                    'paddingRight': gutter,
                     'float': 'left',
                     '-webkit-box-sizing': 'border-box',
                     '-moz-box-sizing': 'border-box',
@@ -135,7 +155,6 @@
             var itemCount = 0;
             var prependCount = this.prependCount;
             var appendCount = this.appendCount;
-            var gutter = this.options.gutter;
             var cols = this.cols;
             var name = this.name;
             var i = 0;
@@ -175,7 +194,6 @@
             $.each(boxes, function (index, value) {
                 var item = $(value);
                 item.css({
-                    'paddingBottom': (gutter - 1),
                     'zoom': '1',
                     'filter': 'alpha(opacity=0)',
                     'opacity': '0'
