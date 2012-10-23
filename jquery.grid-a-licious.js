@@ -1,25 +1,5 @@
 /**
- * jQuery Grid-A-Licious(tm) v3.0 fork 1
- * forked 2012-10-19 by Matthew Campagna
- * 
- * CHANGES:
- *     	- removed 'gutter' and 'width' options
- *		- script now fetches outer-width and margins from CSS and calculates grid dynamically.
- * 		- accepts media queries.
- * 		- example styling:
- *		
- *		 .item {
- *			float: left;
- *			margin: 0 8px 24px;
- *			padding: 8px;
- *			width: 250px;
- *			}
- *		
- *		@media only screen and (max-width: 600px) {
- *			.item {
- *				width: 150px;
- *				}
- *			}
+ * jQuery Grid-A-Licious(tm) v3.01 forked 2012-10-23 by Matthew Campagna
  *
  * Terms of Use - jQuery Grid-A-Licious(tm)
  * under the MIT (http://www.opensource.org/licenses/mit-license.php) License.
@@ -55,7 +35,7 @@
     };
 })(jQuery, 'smartresize');
 
-// The Grid-a-Licious magic…
+// The Grid-A-Licious magic
 
 (function ($) {
 
@@ -66,6 +46,8 @@
 
     $.Gal.settings = {
         selector: '.item',
+        // width: 225,
+        gutter: 0,
         animate: false,
         animationOptions: {
             speed: 200,
@@ -90,6 +72,7 @@
             this.cols = 0;
             this.itemCount = 0;
             this.prependCount = 0;
+            this.isPrepending = false;
             this.appendCount = 0;
             this.resetCount = true;
             this.ifCallback = true;
@@ -97,6 +80,7 @@
             this.options = $.extend(true, {}, $.Gal.settings, options);
             this.gridArr = $.makeArray(this.box.find(this.options.selector));
             this.isResizing = false;
+            this.w = 0;
             this.boxArr = [];
 
             // build columns
@@ -118,18 +102,19 @@
 
         _setCols: function () {
             // calculate columns
+            
             itemWidth = $(this.options.selector).outerWidth(true);
+            
             this.cols = Math.floor(this.box.width() / itemWidth);
-            diff = (this.box.width() - (this.cols * itemWidth) ) / this.cols;
+            diff = (this.box.width() - (this.cols * itemWidth) - this.options.gutter) / this.cols;
             w = (itemWidth + diff) / this.box.width() * 100;
-
-            // add columns to box            
-            var gutter = (diff / 2);
+            this.w = w;
+            // add columns to box
             for (var i = 0; i < this.cols; i++) {
                 var div = $('<div></div>').addClass('galcolumn').attr('id', 'item' + i + this.name).css({
                     'width': w + '%',
-                    'paddingLeft': gutter,
-                    'paddingRight': gutter,
+                    'paddingLeft': this.options.gutter,
+                    'paddingBottom': this.options.gutter,
                     'float': 'left',
                     '-webkit-box-sizing': 'border-box',
                     '-moz-box-sizing': 'border-box',
@@ -138,13 +123,16 @@
                 });
                 this.box.append(div);
             }
+            
+            
+            this.box.find($('#clear' + this.name)).remove();
             // add clear float
             var clear = $('<div></div>').css({
                 'clear': 'both',
                 'height': '0',
                 'width': '0',
                 'display': 'block'
-            });
+            }).attr('id', 'clear' + this.name);
             this.box.append(clear);
         },
 
@@ -155,9 +143,11 @@
             var itemCount = 0;
             var prependCount = this.prependCount;
             var appendCount = this.appendCount;
+            var gutter = this.options.gutter;
             var cols = this.cols;
             var name = this.name;
             var i = 0;
+            var w = $('.galcolumn').width();
 
             // if arr
             if (arr) {
@@ -168,14 +158,13 @@
                     appendCount += count;
                     // set itemCount to last count of appened items
                     itemCount = this.appendCount;
-                }
+                }               
                 // if prepend
                 if (method == "prepend") {
-                    // set itemCount to 0 (restart)
-                    itemCount = 0;
-                    // render old items and reverse the new items
-                    this._updateAfterPrepend(this.gridArr, boxes);
-                    boxes.reverse();
+                    // set itemCount
+                    this.isPrepending = true;
+                    itemCount = Math.round(count % cols);
+                    if (itemCount <= 0) itemCount = cols; 
                 }
                 // called by _updateAfterPrepend()
                 if (method == "renderAfterPrepend") {
@@ -184,7 +173,7 @@
                     // set itemCount by counting previous prepended items
                     itemCount = count;
                 }
-            } 
+            }
             else {
                 boxes = this.gridArr;
                 appendCount = $(this.gridArr).size();
@@ -193,36 +182,51 @@
             // push out the items to the columns
             $.each(boxes, function (index, value) {
                 var item = $(value);
+                var width = '100%';
+            
+                // if you want something not to be "responsive", add the class "not-responsive" to the selector container            
+                if (item.hasClass('not-responsive')) {
+                  width = 'auto';
+                }
+                
                 item.css({
                     'zoom': '1',
                     'filter': 'alpha(opacity=0)',
                     'opacity': '0'
                 }).find('img, object, embed, iframe').css({
-                    'width': '100%',
-                    'height': 'auto'
+                    'width': width,
+                    'height': 'auto',
+                    'display': 'block',
+                    'margin-left': 'auto',
+                    'margin-right': 'auto'
                 });
-
+                
                 // prepend on append to column
                 if (method == 'prepend') {
+                    itemCount--;
                     $("#item" + itemCount + name).prepend(item);
+                    items.push(item);
+                    if(itemCount == 0) itemCount = cols;
+                    
                 } else {
                     $("#item" + itemCount + name).append(item);
+                    items.push(item);
+                    itemCount++;
+                    if (itemCount >= cols) itemCount = 0;
+                    if (appendCount >= cols) appendCount = (appendCount - cols);
                 }
-                itemCount++;
-                items.push(item);
-
-                // reset counters
-                if (prependCount >= cols) prependCount = (prependCount - cols);
-                if (itemCount >= cols) itemCount = 0;
-                if (appendCount >= cols) appendCount = (appendCount - cols);
-
             });
 
             this.appendCount = appendCount;
             this.itemCount = itemCount;
 
             if (method == "append" || method == "prepend") {
+                if (method == "prepend") { 
+                  // render old items and reverse the new items
+                  this._updateAfterPrepend(this.gridArr, boxes);
+                }
                 this._renderItem(items);
+                this.isPrepending = false;
             } else {
                 this._renderItem(this.gridArr);
             }
@@ -253,6 +257,7 @@
 
                 // fadeInOnAppear
                 if (queue === true && effect == "fadeInOnAppear") {
+                    if (this.isPrepending) items.reverse();
                     $.each(items, function (index, value) {
                         setTimeout(function () {
                             $(value).animate({
@@ -266,6 +271,7 @@
                         i++;
                     });
                 } else if (queue === false && effect == "fadeInOnAppear") {
+                    if (this.isPrepending) items.reverse();
                     $.each(items, function (index, value) {
                         $(value).animate({
                             opacity: '1.0'
@@ -295,7 +301,7 @@
                     });
                 }
 
-                // don’t animate & no queue
+            // don not animate & no queue
             } else {
                 $.each(items, function (index, value) {
                     $(value).css({
@@ -309,28 +315,13 @@
             }
         },
 
-        _updateAfterPrepend: function (prevItems, newItems) {
+        _updateAfterPrepend: function (prevItems, newItems) {            
             var gridArr = this.gridArr;
-            var box = this.box;
-            box.append('<div class="' + box.attr('id') + 'box"></div>');
-
-            // append .item from box to temp element
-            $.each(prevItems, function (index, value) {
-                box.find($(value)).appendTo('.' + box.attr('id') + 'box');
-            })
-
-            // turn of animation and render the rest of the grid
-            this.isResizing = true;
-            this._renderGrid('renderAfterPrepend', prevItems, $(newItems).size());
-            this.isResizing = false;
-
             // add new items to gridArr
             $.each(newItems, function (index, value) {
                 gridArr.unshift(value);
             })
-
-            // delete temp element
-            box.find($('.' + box.attr('id') + "box")).remove();
+            this.gridArr = gridArr;
         },
 
         resize: function () {
@@ -346,8 +337,6 @@
             this._renderGrid('append');
             this.ifCallback = true;
             this.isResizing = false;
-
-            // provide $elems as context for the callback
         },
 
         append: function (items) {
@@ -361,7 +350,6 @@
         },
 
         prepend: function (items) {
-            //items.reverse();
             this.ifCallback = false;
             this._renderGrid('prepend', items, $(items).size());
             this.ifCallback = true;
