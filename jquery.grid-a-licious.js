@@ -1,6 +1,6 @@
 /**
  * jQuery Grid-A-Licious(tm) v3.01
- * forked 2012-10-24 by Matthew Campagna v3.01.2
+ * forked 2012-10-24 by Matthew Campagna v3.01.3
  *
  * Terms of Use - jQuery Grid-A-Licious(tm)
  * under the MIT (http://www.opensource.org/licenses/mit-license.php) License.
@@ -130,7 +130,6 @@
                 var div = $('<div></div>').addClass('galcolumn').attr('id', 'item' + i + this.name).css({
                     'width': w + '%',
                     'paddingLeft': gutterSide,
-                    'paddingRight': gutterSide,
                     'paddingBottom': gutter,
                     'float': 'left',
                     '-webkit-box-sizing': 'border-box',
@@ -141,8 +140,10 @@
                 this.box.append(div);
             }
             
+	        if (this.options.getCSSWidth) {
 			// nudge first column to center columns within container
             $('#item0' + this.name).css('margin-left', Math.floor((this.box.width() - $('.galcolumn').outerWidth() * this.cols))/2 + 'px');
+            }
 
             if (!this.options.clearfix) {
 	            this.box.find($('#clear' + this.name)).remove();
