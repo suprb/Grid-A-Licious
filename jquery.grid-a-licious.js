@@ -121,12 +121,12 @@
             if (this.options.getCSSWidth) {
 				gutter = diff;
 				gutterSide = Math.floor(diff/2);
+				// center columns within container
+				$(this.box).css('padding-left', Math.floor( ( this.box.width() - ( (itemWidth + diff) * this.cols ) ) / 2 ) );
 			} else {
 				gutter = this.options.gutter;
 				gutterSide = this.options.gutter;
 			}
-			// center columns within container
-			$(this.box).css('padding-left', Math.floor( ( this.box.width() - ( (itemWidth + diff) * this.cols ) ) / 2 ) );
 
             for (var i = 0; i < this.cols; i++) {
                 var div = $('<div></div>').addClass('galcolumn').attr('id', 'item' + i + this.name).css({
