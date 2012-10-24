@@ -141,6 +141,7 @@
                 this.box.append(div);
             }
             
+			// nudge first column to center columns within container
             $('#item0' + this.name).css('margin-left', Math.floor((this.box.width() - $('.galcolumn').outerWidth() * this.cols))/2 + 'px');
 
             if (!this.options.clearfix) {
