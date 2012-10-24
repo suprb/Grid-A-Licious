@@ -121,8 +121,6 @@
             if (this.options.getCSSWidth) {
 				gutter = diff;
 				gutterSide = Math.floor(diff/2);
-				// center columns within container
-				$(this.box).css('padding-left', Math.floor( ( this.box.width() - ( (itemWidth + diff) * this.cols ) ) / 2 ) );
 			} else {
 				gutter = this.options.gutter;
 				gutterSide = this.options.gutter;
@@ -142,6 +140,8 @@
                 });
                 this.box.append(div);
             }
+            
+            $('#item0' + this.name).css('margin-left', Math.floor((this.box.width() - $('.galcolumn').outerWidth() * this.cols))/2 + 'px');
 
             if (!this.options.clearfix) {
 	            this.box.find($('#clear' + this.name)).remove();
