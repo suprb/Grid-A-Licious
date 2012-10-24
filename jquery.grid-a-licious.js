@@ -1,5 +1,6 @@
 /**
- * jQuery Grid-A-Licious(tm) v3.01 forked 2012-10-23 by Matthew Campagna
+ * jQuery Grid-A-Licious(tm) v3.01
+ * forked 2012-10-24 by Matthew Campagna v3.01.2
  *
  * Terms of Use - jQuery Grid-A-Licious(tm)
  * under the MIT (http://www.opensource.org/licenses/mit-license.php) License.
@@ -46,8 +47,10 @@
 
     $.Gal.settings = {
         selector: '.item',
-        // width: 225,
-        gutter: 0,
+        getCSSWidth: false,
+        clearfix: false,
+        width: 225,
+        gutter: 20,
         animate: false,
         animationOptions: {
             speed: 200,
@@ -103,18 +106,31 @@
         _setCols: function () {
             // calculate columns
             
-            itemWidth = $(this.options.selector).outerWidth(true);
-            
+            if (this.options.getCSSWidth) {
+    			itemWidth = $(this.options.selector).outerWidth(true);
+			} else {
+				itemWidth = this.options.width;
+			}
+
             this.cols = Math.floor(this.box.width() / itemWidth);
             diff = (this.box.width() - (this.cols * itemWidth) - this.options.gutter) / this.cols;
             w = (itemWidth + diff) / this.box.width() * 100;
             this.w = w;
             // add columns to box
+
+            if (this.options.getCSSWidth) {
+				gutter = diff;
+				gutterLeft = Math.floor(diff/2);
+			} else {
+				gutter = this.options.gutter;
+				gutterLeft = this.options.gutter;
+			}
+
             for (var i = 0; i < this.cols; i++) {
                 var div = $('<div></div>').addClass('galcolumn').attr('id', 'item' + i + this.name).css({
                     'width': w + '%',
-                    'paddingLeft': this.options.gutter,
-                    'paddingBottom': this.options.gutter,
+                    'paddingLeft': gutterLeft,
+                    'paddingBottom': gutter,
                     'float': 'left',
                     '-webkit-box-sizing': 'border-box',
                     '-moz-box-sizing': 'border-box',
@@ -124,16 +140,17 @@
                 this.box.append(div);
             }
             
-            
-            this.box.find($('#clear' + this.name)).remove();
-            // add clear float
-            var clear = $('<div></div>').css({
-                'clear': 'both',
-                'height': '0',
-                'width': '0',
-                'display': 'block'
-            }).attr('id', 'clear' + this.name);
-            this.box.append(clear);
+            if (!this.options.clearfix) {
+	            this.box.find($('#clear' + this.name)).remove();
+	            // add clear float
+	            var clear = $('<div></div>').css({
+	                'clear': 'both',
+	                'height': '0',
+	                'width': '0',
+	                'display': 'block'
+	            }).attr('id', 'clear' + this.name);
+	            this.box.append(clear);
+            }
         },
 
         _renderGrid: function (method, arr, count, prepArray) {
@@ -143,7 +160,6 @@
             var itemCount = 0;
             var prependCount = this.prependCount;
             var appendCount = this.appendCount;
-            var gutter = this.options.gutter;
             var cols = this.cols;
             var name = this.name;
             var i = 0;
@@ -190,6 +206,7 @@
                 }
                 
                 item.css({
+                    'marginBottom': gutter,
                     'zoom': '1',
                     'filter': 'alpha(opacity=0)',
                     'opacity': '0'
