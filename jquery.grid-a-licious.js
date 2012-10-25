@@ -1,6 +1,6 @@
 /**
  * jQuery Grid-A-Licious(tm) v3.01
- * forked 2012-10-24 by Matthew Campagna v3.01.3
+ * forked 2012-10-24 by Matthew Campagna v3.01.4
  *
  * Terms of Use - jQuery Grid-A-Licious(tm)
  * under the MIT (http://www.opensource.org/licenses/mit-license.php) License.
@@ -143,6 +143,11 @@
 	        if (this.options.getCSSWidth) {
 			// nudge first column to center columns within container
             $('#item0' + this.name).css('margin-left', Math.floor((this.box.width() - $('.galcolumn').outerWidth() * this.cols))/2 + 'px');
+            } else {
+			$(this.options.selector).css({
+				'padding': 0,
+				'width': 'auto'
+			});
             }
 
             if (!this.options.clearfix) {
