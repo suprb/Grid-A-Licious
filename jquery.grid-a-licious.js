@@ -120,16 +120,19 @@
 
             if (this.options.getCSSWidth) {
 				gutter = diff;
-				gutterSide = Math.floor(diff/2);
+				gutterRight = 0;
+				gutterLeft = Math.floor(diff/2);
 			} else {
 				gutter = this.options.gutter;
-				gutterSide = this.options.gutter;
+				gutterRight = this.options.gutter/2;
+				gutterLeft = this.options.gutter/2;
 			}
 
             for (var i = 0; i < this.cols; i++) {
                 var div = $('<div></div>').addClass('galcolumn').attr('id', 'item' + i + this.name).css({
                     'width': w + '%',
-                    'paddingLeft': gutterSide,
+                    'paddingRight': gutterRight,
+                    'paddingLeft': gutterLeft,
                     'paddingBottom': gutter,
                     'float': 'left',
                     '-webkit-box-sizing': 'border-box',
@@ -144,6 +147,7 @@
 			// nudge first column to center columns within container
             $('#item0' + this.name).css('margin-left', Math.floor((this.box.width() - $('.galcolumn').outerWidth() * this.cols))/2 + 'px');
             } else {
+            $('#item0' + this.name).css('margin-left', Math.floor((this.box.width() - $('.galcolumn').outerWidth() * this.cols))/2 + 'px');
 			$(this.options.selector).css({
 				'padding': 0,
 				'width': 'auto'
