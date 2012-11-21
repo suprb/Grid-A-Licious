@@ -101,10 +101,18 @@
         },
 
         _setCols: function () {
+            
             // calculate columns
-            this.cols = Math.floor(this.box.width() / this.options.width);
-            diff = (this.box.width() - (this.cols * this.options.width) - this.options.gutter) / this.cols;
-            w = (this.options.width + diff) / this.box.width() * 100;
+            var width = 0;
+            var swappedStyle = this.box.css('display');
+            this.box.css('display', 'block');
+            width = this.box.width();
+            this.box.css('display', swappedStyle);
+
+
+            this.cols = Math.floor(width / this.options.width);
+            diff = (width - (this.cols * this.options.width) - this.options.gutter) / this.cols;
+            w = (this.options.width + diff) / width * 100;
             this.w = w;
             // add columns to box
             for (var i = 0; i < this.cols; i++) {
