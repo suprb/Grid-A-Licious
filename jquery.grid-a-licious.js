@@ -103,6 +103,8 @@
         _setCols: function () {
             // calculate columns
             this.cols = Math.floor(this.box.width() / this.options.width);
+            //If Cols lower than 1, the grid disappears
+            if (this.cols < 1) { this.cols = 1; }
             diff = (this.box.width() - (this.cols * this.options.width) - this.options.gutter) / this.cols;
             w = (this.options.width + diff) / this.box.width() * 100;
             this.w = w;
