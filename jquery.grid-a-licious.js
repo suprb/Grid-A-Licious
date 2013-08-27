@@ -1,18 +1,20 @@
 /**
- * jQuery Grid-A-Licious(tm) v3.01
+ * jQuery Grid-A-Licious(tm) v3.02
  *
  * Terms of Use - jQuery Grid-A-Licious(tm)
  * under the MIT (http://www.opensource.org/licenses/mit-license.php) License.
  *
- * Copyright 2008-2012 Andreas Pihlström (Suprb). All rights reserved.
+ * Copyright 2008-2013. All rights reserved. 
+ * Author: Andreas Pihlström (Suprb)
  * (http://suprb.com/apps/gridalicious/)
- *
+ * 
+ * Contributors:
+ *  * John Hann Debouncing function
+ *              http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
+ *              Code from http://paulirish.com/2009/throttled-smartresize-jquery-event-handler/
+ *  * github.com/falconwhite Less than one columns fix
+ *  * github.com/pandaiolo Resize event fix for iOS
  */
-
-// Debouncing function from John Hann
-// http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
-// Copy pasted from http://paulirish.com/2009/throttled-smartresize-jquery-event-handler/
-
 (function ($, sr) {
     var debounce = function (func, threshold, execAsap) {
         var timeout;
@@ -81,6 +83,7 @@
             this.gridArr = $.makeArray(this.box.find(this.options.selector));
             this.isResizing = false;
             this.w = 0;
+            this.previous_width = this.box.width();
             this.boxArr = [];
 
             // build columns
@@ -101,10 +104,18 @@
         },
 
         _setCols: function () {
+            
             // calculate columns
-            this.cols = Math.floor(this.box.width() / this.options.width);
-            diff = (this.box.width() - (this.cols * this.options.width) - this.options.gutter) / this.cols;
-            w = (this.options.width + diff) / this.box.width() * 100;
+            var width = 0;
+            var swappedStyle = this.box.css('display');
+            this.box.css('display', 'block');
+            width = this.box.width();
+            this.box.css('display', swappedStyle);
+
+            this.cols = Math.max(Math.floor(width / this.options.width), 1);
+
+            diff = (width - (this.cols * this.options.width) - this.options.gutter) / this.cols;
+            w = (this.options.width + diff) / width * 100;
             this.w = w;
             // add columns to box
             for (var i = 0; i < this.cols; i++) {
@@ -323,6 +334,11 @@
         },
 
         resize: function () {
+            //alert('resizeeeeee ' +  this.box.width());
+            if (this.box.width() == this.previous_width) {
+                return;
+            }
+            this.previous_width = this.box.width();
             // delete columns in box
             this.box.find($('.galcolumn')).remove();
             // build columns
