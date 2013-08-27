@@ -4,7 +4,7 @@ Demo: [http://suprb.com/apps/gridalicious/](http://suprb.com/apps/gridalicious/)
 
 #### Changelog
 
-- **3.02**
+- **3.02**  
 Fix iOS resize and less than 1 column bugs
 
 - **3.01**  
