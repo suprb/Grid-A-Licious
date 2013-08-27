@@ -13,7 +13,7 @@
  *              http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
  *              Code from http://paulirish.com/2009/throttled-smartresize-jquery-event-handler/
  *  * github.com/falconwhite Less than one columns fix
- *  * github.com/pandaiolo Resize event fix for iOS
+ *  * github.com/pandaiolo Resize event fix for iOS and jQuery Mobile
  */
 (function ($, sr) {
     var debounce = function (func, threshold, execAsap) {
