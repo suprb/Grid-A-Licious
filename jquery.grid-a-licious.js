@@ -334,7 +334,6 @@
         },
 
         resize: function () {
-            //alert('resizeeeeee ' +  this.box.width());
             if (this.box.width() == this.previous_width) {
                 return;
             }
