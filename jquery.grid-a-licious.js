@@ -193,13 +193,20 @@
                     'zoom': '1',
                     'filter': 'alpha(opacity=0)',
                     'opacity': '0'
-                }).find('img, object, embed, iframe').css({
-                    'width': width,
-                    'height': 'auto',
-                    'display': 'block',
-                    'margin-left': 'auto',
-                    'margin-right': 'auto'
-                });
+                }).find('img, object, embed, iframe')
+                    //the .not selector is useful not to select some elements, especially on tumblr themes.
+                    //On tumblr themes there are some elements that it is better not to touch and this plugin touch these elements.
+                    //You cound add an option like `ignore: undefined` which will be defined later on the options.
+                    //Unfortunatelly I am not able to add this feature to your plugin but I (and all tumblr themes designers) will be gratefull.
+                    //Your plugin is the only one that works!!
+                    .not( '.like_button iframe')
+                    .css({
+                        'width': width,
+                        'height': 'auto',
+                        'display': 'block',
+                        'margin-left': 'auto',
+                        'margin-right': 'auto'
+                    });               
                 
                 // prepend on append to column
                 if (method == 'prepend') {
