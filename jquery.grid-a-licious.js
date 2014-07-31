@@ -4,7 +4,7 @@
  * Terms of Use - jQuery Grid-A-Licious(tm)
  * under the MIT (http://www.opensource.org/licenses/mit-license.php) License.
  *
- * Copyright 2008-2012 Andreas Pihlström (Suprb). All rights reserved.
+ * Copyright 2008-2012 Andreas PihlstrÃ¶m (Suprb). All rights reserved.
  * (http://suprb.com/apps/gridalicious/)
  *
  */
@@ -194,12 +194,7 @@
                     'filter': 'alpha(opacity=0)',
                     'opacity': '0'
                 }).find('img, object, embed, iframe')
-                    //the .not selector is useful not to select some elements, especially on tumblr themes.
-                    //On tumblr themes there are some elements that it is better not to touch and this plugin touch these elements.
-                    //You cound add an option like `ignore: undefined` which will be defined later on the options.
-                    //Unfortunatelly I am not able to add this feature to your plugin but I (and all tumblr themes designers) will be gratefull.
-                    //Your plugin is the only one that works!!
-                    .not( '.like_button iframe')
+                    .not( '.post *')
                     .css({
                         'width': width,
                         'height': 'auto',
