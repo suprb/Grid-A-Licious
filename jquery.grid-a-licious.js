@@ -77,6 +77,7 @@
             this.resetCount = true;
             this.ifCallback = true;
             this.box = this.element;
+            this.boxWidth = this.box.width();
             this.options = $.extend(true, {}, $.Gal.settings, options);
             this.gridArr = $.makeArray(this.box.find(this.options.selector));
             this.isResizing = false;
@@ -325,6 +326,10 @@
         },
 
         resize: function () {
+            if (this.box.width() === this.boxWidth) {
+                return;
+            }
+
             // delete columns in box
             this.box.find($('.galcolumn')).remove();
             // build columns
@@ -335,6 +340,7 @@
             this._renderGrid('append');
             this.ifCallback = true;
             this.isResizing = false;
+            this.boxWidth = this.box.width();
         },
 
         append: function (items) {
