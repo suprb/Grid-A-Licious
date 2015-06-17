@@ -291,7 +291,7 @@
                     $.each(items, function (index, value) {
                         $(value).css({
                             'opacity': '1',
-                            'filter': 'alpha(opacity=1)'
+                            'filter': 'alpha(opacity=100)'
                         });
                         t++;
                         if (t == items.length) {
@@ -307,7 +307,7 @@
                 $.each(items, function (index, value) {
                     $(value).css({
                         'opacity': '1',
-                        'filter': 'alpha(opacity=1)'
+                        'filter': 'alpha(opacity=100)'
                     });
                 });
                 if (this.ifCallback) {
