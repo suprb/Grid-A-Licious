@@ -331,7 +331,7 @@
             }
 
             // delete columns in box
-            this.box.find($('.galcolumn')).remove();
+            this.box.find(this.options.selector).unwrap();
             // build columns
             this._setCols();
             // build grid
