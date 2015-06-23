@@ -4,7 +4,7 @@
  * Terms of Use - jQuery Grid-A-Licious(tm)
  * under the MIT (http://www.opensource.org/licenses/mit-license.php) License.
  *
- * Copyright 2008-2012 Andreas Pihlström (Suprb). All rights reserved.
+ * Copyright 2008-2012 Andreas PihlstrÃ¶m (Suprb). All rights reserved.
  * (http://suprb.com/apps/gridalicious/)
  *
  */
@@ -194,13 +194,15 @@
                     'zoom': '1',
                     'filter': 'alpha(opacity=0)',
                     'opacity': '0'
-                }).find('img, object, embed, iframe').css({
-                    'width': width,
-                    'height': 'auto',
-                    'display': 'block',
-                    'margin-left': 'auto',
-                    'margin-right': 'auto'
-                });
+                }).find('img, object, embed, iframe')
+                    .not( '.post *')
+                    .css({
+                        'width': width,
+                        'height': 'auto',
+                        'display': 'block',
+                        'margin-left': 'auto',
+                        'margin-right': 'auto'
+                    });               
                 
                 // prepend on append to column
                 if (method == 'prepend') {
