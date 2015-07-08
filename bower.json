@@ -1,0 +1,19 @@
+{
+  "name": "Grid-A-Licious",
+  "version": "3.0.1",
+  "homepage": "https://github.com/suprb/Grid-A-Licious",
+  "authors": [
+    "Andreas Pihlstrom <info@suprb.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}
