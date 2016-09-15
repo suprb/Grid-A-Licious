@@ -123,8 +123,8 @@
                 });
                 this.box.append(div);
             }
-            
-            
+
+
             this.box.find($('#clear' + this.name)).remove();
             // add clear float
             var clear = $('<div></div>').css({
@@ -158,13 +158,13 @@
                     appendCount += count;
                     // set itemCount to last count of appened items
                     itemCount = this.appendCount;
-                }               
+                }
                 // if prepend
                 if (method == "prepend") {
                     // set itemCount
                     this.isPrepending = true;
                     itemCount = Math.round(count % cols);
-                    if (itemCount <= 0) itemCount = cols; 
+                    if (itemCount <= 0) itemCount = cols;
                 }
                 // called by _updateAfterPrepend()
                 if (method == "renderAfterPrepend") {
@@ -176,19 +176,19 @@
             }
             else {
                 boxes = this.gridArr;
-                appendCount = $(this.gridArr).size();
+                appendCount = $(this.gridArr).length;
             }
 
             // push out the items to the columns
             $.each(boxes, function (index, value) {
                 var item = $(value);
                 var width = '100%';
-            
-                // if you want something not to be "responsive", add the class "not-responsive" to the selector container            
+
+                // if you want something not to be "responsive", add the class "not-responsive" to the selector container
                 if (item.hasClass('not-responsive')) {
                   width = 'auto';
                 }
-                
+
                 item.css({
                     'marginBottom': gutter,
                     'zoom': '1',
@@ -201,14 +201,14 @@
                     'margin-left': 'auto',
                     'margin-right': 'auto'
                 });
-                
+
                 // prepend on append to column
                 if (method == 'prepend') {
                     itemCount--;
                     $("#item" + itemCount + name).prepend(item);
                     items.push(item);
                     if(itemCount == 0) itemCount = cols;
-                    
+
                 } else {
                     $("#item" + itemCount + name).append(item);
                     items.push(item);
@@ -222,7 +222,7 @@
             this.itemCount = itemCount;
 
             if (method == "append" || method == "prepend") {
-                if (method == "prepend") { 
+                if (method == "prepend") {
                   // render old items and reverse the new items
                   this._updateAfterPrepend(this.gridArr, boxes);
                 }
@@ -316,7 +316,7 @@
             }
         },
 
-        _updateAfterPrepend: function (prevItems, newItems) {            
+        _updateAfterPrepend: function (prevItems, newItems) {
             var gridArr = this.gridArr;
             // add new items to gridArr
             $.each(newItems, function (index, value) {
@@ -350,12 +350,12 @@
                 gridArr.push(value);
                 gridArrAppend.push(value);
             });
-            this._renderGrid('append', items, $(items).size());
+            this._renderGrid('append', items, $(items).length);
         },
 
         prepend: function (items) {
             this.ifCallback = false;
-            this._renderGrid('prepend', items, $(items).size());
+            this._renderGrid('prepend', items, $(items).length);
             this.ifCallback = true;
         },
     }
